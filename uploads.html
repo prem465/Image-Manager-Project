@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Uploaded Images</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(to right top, #051937, #004d7a, #008793, #00bf72, #a8eb12);
+      color: #333;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+    }
+    .container {
+      padding-top: 50px;
+    }
+    .text-center {
+      color: white;
+      font-weight: 700;
+      margin-bottom: 30px;
+    }
+    .img-thumbnail {
+      margin-top: 20px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    .image-container {
+      margin-bottom: 20px;
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+    }
+    .button-group {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 10px;
+    }
+    .btn {
+      border: none;
+      color: white;
+      padding: 8px 16px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 14px;
+      margin: 4px 2px;
+      transition-duration: 0.4s;
+      cursor: pointer;
+      border-radius: 4px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    .btn-sm { padding: 5px 10px; font-size: 0.875rem; }
+    .btn-danger { background-color: #f44336; }
+    .btn-danger:hover { background-color: #d32f2f; }
+    .btn-success { background-color: #4CAF50; }
+    .btn-success:hover { background-color: #388E3C; }
+    .btn-primary { background-color: #008CBA; }
+    .btn-primary:hover { background-color: #005f73; }
+    .logout-button {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+    }
+    .btn-logout {
+      font-size: 16px;
+      background-color: #f44336;
+    }
+    .btn-logout:hover {
+      background-color: #d32f2f;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="text-center">Uploaded Images</h1>
+    <div class="row">
+      <!-- Image cards loop -->
+      {% for image in images %}
+        <div class="col-md-4 col-sm-6 image-container">
+          <img src="{{ url_for('static', filename='uploads/' + image) }}" class="img-thumbnail" alt="{{ image }}">
+          <div class="button-group">
+            <form action="{{ url_for('delete_image', filename=image) }}" method="post">
+              <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+            </form>
+            <a href="{{ url_for('static', filename='uploads/' + image) }}" download="{{ image }}" class="btn btn-success btn-sm">Download</a>
+            <button onclick="shareImage('{{ url_for('static', filename='uploads/' + image) }}', '{{ image }}')" class="btn btn-primary btn-sm">Share</button>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    <!-- Logout button -->
+    <div class="logout-button">
+      <form action="{{ url_for('logout') }}" method="post">
+        <button type="submit" class="btn btn-danger btn-logout">Logout</button>
+      </form>
+    </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.9.12/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script>
+    // Share image functionality
+    function shareImage(url, title) {
+      if (navigator.share) {
+        navigator.share({
+          title: title,
+          url: url
+        }).then(() => {
+          console.log('Thanks for sharing!');
+        })
+        .catch(console.error);
+      } else {
+        // Fallback for browsers that do not support the Web Share API
+        prompt('Copy this URL to share:', url);
+      }
+    }
+  </script>
+</body>
+</html>
