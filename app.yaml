@@ -1,0 +1,11 @@
+runtime: python39
+
+env_variables:
+  
+  GOOGLE_APPLICATION_CREDENTIALS: './hidden-moon-416600-cc287124a3f0.json'
+
+entrypoint: gunicorn -b :$PORT app:app
+
+handlers:
+- url: /static
+  static_dir: static

@@ -76,32 +76,34 @@
   <div class="container">
     <h1 class="text-center">Uploaded Images</h1>
     <div class="row">
-      <!-- Image cards loop -->
+     
       {% for image in images %}
-        <div class="col-md-4 col-sm-6 image-container">
-          <img src="{{ url_for('static', filename='uploads/' + image) }}" class="img-thumbnail" alt="{{ image }}">
-          <div class="button-group">
-            <form action="{{ url_for('delete_image', filename=image) }}" method="post">
-              <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-            </form>
-            <a href="{{ url_for('static', filename='uploads/' + image) }}" download="{{ image }}" class="btn btn-success btn-sm">Download</a>
-            <button onclick="shareImage('{{ url_for('static', filename='uploads/' + image) }}', '{{ image }}')" class="btn btn-primary btn-sm">Share</button>
-          </div>
-        </div>
-      {% endfor %}
+<div class="col-md-4 col-sm-6 image-container">
+  <img src="{{ image.url }}" class="img-thumbnail" alt="{{ image.name }}">
+  <div class="button-group">
+    <form action="{{ url_for('delete_image', filename=image.name) }}" method="post">
+      <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+    </form>
+   
+    <a href="{{ image.url }}" class="btn btn-success btn-sm" download="{{ image.name }}">Download</a>
+    <button onclick="shareImage('{{ image.url }}', '{{ image.name }}')" class="btn btn-primary btn-sm">Share</button>
+  </div>
+</div>
+{% endfor %}
     </div>
-    <!-- Logout button -->
-    <div class="logout-button">
+
+   <div class="logout-button">
       <form action="{{ url_for('logout') }}" method="post">
         <button type="submit" class="btn btn-danger btn-logout">Logout</button>
       </form>
-    </div>
   </div>
+ 
+   </div>
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.9.12/dist/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <script>
-    // Share image functionality
+   
     function shareImage(url, title) {
       if (navigator.share) {
         navigator.share({
@@ -112,10 +114,10 @@
         })
         .catch(console.error);
       } else {
-        // Fallback for browsers that do not support the Web Share API
+        
         prompt('Copy this URL to share:', url);
       }
     }
-  </script>
+</script>
 </body>
 </html>
